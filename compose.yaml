@@ -1,0 +1,28 @@
+---
+name: docker_compose_volume_testing
+services:
+  reader:
+    depends_on:
+      - redis
+    image: mcdonnnj/compose-testing
+    command:
+      - read
+    volumes:
+      - output-data:/home/test-user/output
+  redis:
+    image: redis:alpine
+  writer:
+    depends_on:
+      - redis
+    image: mcdonnnj/compose-testing
+    command:
+      - write
+    volumes:
+      - output-data:/home/test-user/output
+volumes:
+  output-data:
+    driver: 'local'
+    driver_opts:
+      device: './output'
+      o: 'bind'
+      type: 'none'
